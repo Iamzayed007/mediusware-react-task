@@ -2,28 +2,50 @@ import React, { useEffect, useState } from 'react';
 import { createBrowserHistory } from 'history';
 const Problem2 = () => {
  const [modalType,setModalType] =useState('')
- const [countryList,setCountryList] =useState([])
+ const [contactList,setContactList] =useState([])
  const history = createBrowserHistory();
  const handleAllCountry=(type)=>{
  setModalType(type)
-//  history.push('/problem-2/country')
+ history.push('/problem-2/all-contacts')
+ console.log(modalType);
+ }
+ const handleUsCountry=(type)=>{
+ setModalType(type)
+ history.push('/problem-2/us-country')
  console.log(modalType);
  }
  useEffect(()=>{
-    // if (modalType === 'allContacts') {
-        fetch('https://contact.mediusware.com/api/contacts/',{
-            headers:{
-                "Access-Control-Allow-Origin": "http://localhost:5173/"
-            }
+    const headers = new Headers();
+    headers.append('Access-Control-Allow-Origin', "*")
+    headers.append('Access-Control-Allow-Credentials' , "true" )
+    headers.append('Access-Control-Allow-Methods', "GET,HEAD,OPTIONS,POST,PUT" )
+    headers.append('Access-Control-Allow-Headers',"Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers")
+
+ if (modalType === 'usContacts') {
+    fetch('https://contact.mediusware.com/api/country-contacts/United States',{
+        // mode:'no-cors',
+        headers:headers
+    })
+    .then(res=>res.json())
+    .then(data=>{
+        console.log("all",data);
+        setContactList(data)
+        console.log(contactList);
+    })
+ }
+    if (modalType === 'allContacts') {
+        fetch('https://contact.mediusware.com/api/contacts/?page=1',{
+            // mode:'no-cors',
+            headers:headers
         })
         .then(res=>res.json())
         .then(data=>{
             console.log("all",data);
-            setCountryList(data)
-            console.log(countryList);
+            setContactList(data)
+            console.log(contactList);
         })
-    // }
- },[])
+    }
+ },[modalType])
     return (
 
         <div className="container">
@@ -32,7 +54,7 @@ const Problem2 = () => {
                 
                 <div className="d-flex justify-content-center gap-3">
                 <button className="btn btn-lg btn-outline-primary" type="button" onClick={()=>handleAllCountry('allContacts')} >All Contacts</button>
-                <button className="btn btn-lg btn-outline-warning" type="button" onClick={()=>handleAllCountry('usContacts')} >US Contacts</button>
+                <button className="btn btn-lg btn-outline-warning" type="button" onClick={()=>handleUsCountry('usContacts')} >US Contacts</button>
                 </div>
                 
             </div>
