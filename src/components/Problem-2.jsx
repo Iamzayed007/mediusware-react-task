@@ -1,16 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { createBrowserHistory } from 'history';
+import Modal from './Modal';
+import ModalContent from './Modal';
 const Problem2 = () => {
  const [modalType,setModalType] =useState('')
  const [contactList,setContactList] =useState([])
  const history = createBrowserHistory();
+ const [show, setShow] = useState(false);
+
+  const handleClose = () => {setShow(false)
+    history.push('/problem-2')
+}
+  const handleShow = () => setShow(true);
+
+
+
  const handleAllCountry=(type)=>{
  setModalType(type)
+ setShow(true);
  history.push('/problem-2/all-contacts')
  console.log(modalType);
  }
  const handleUsCountry=(type)=>{
  setModalType(type)
+ setShow(true);
  history.push('/problem-2/us-country')
  console.log(modalType);
  }
@@ -53,11 +66,15 @@ const Problem2 = () => {
                 <h4 className='text-center text-uppercase mb-5'>Problem-2</h4>
                 
                 <div className="d-flex justify-content-center gap-3">
-                <button className="btn btn-lg btn-outline-primary" type="button" onClick={()=>handleAllCountry('allContacts')} >All Contacts</button>
+                <button className="btn btn-lg btn-outline-primary" type="button" onClick={()=>handleAllCountry('allContacts')} data-bs-toggle="modal" data-bs-target="#exampleModal" >All Contacts</button>
                 <button className="btn btn-lg btn-outline-warning" type="button" onClick={()=>handleUsCountry('usContacts')} >US Contacts</button>
                 </div>
                 
             </div>
+            <ModalContent show={show} handleClose={handleClose}
+            handleUsCountry={handleUsCountry}
+            handleAllCountry={handleAllCountry}
+            />
         </div>
     );
 };
